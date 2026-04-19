@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Product Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header-section h1 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .product-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .product-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .product-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 200px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        
+        .product-image:hover img {
+            transform: scale(1.1);
+        }
+        
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .product-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .product-stock {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        .product-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .order-section {
+            text-align: center;
+            padding: 30px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+        }
+        
+        .order-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .btn-order {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-order:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(40, 167, 69, 0.4);
+        }
+        
+        .success-message {
+            display: none;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .error-message {
+            display: none;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* Image Modal Styles */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .product-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-name {
+                font-size: 2rem;
+            }
+            
+            .product-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">
+        <i class="fas fa-arrow-left me-2"></i>Back to Products
+    </button>
+    
+    <div class="detail-container">
+        <div class="header-section">
+            <h1><i class="fas fa-box-open me-3"></i>Product Details</h1>
+            <p class="text-muted">View complete product information</p>
+        </div>
+        
+        <div id="productContent">
+            <!-- Product details will be dynamically loaded here -->
+        </div>
+        
+        <div class="order-section">
+            <h3><i class="fas fa-shopping-cart me-2"></i>Ready to Order?</h3>
+            <p class="text-muted">Click below to place your order for this amazing product</p>
+            <button class="btn-order" onclick="placeOrder()">
+                <i class="fas fa-shopping-bag me-2"></i>Order Now
+            </button>
+        </div>
+        
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle me-2"></i>
+            <strong>Order Placed Successfully!</strong><br>
+            Your order has been received and is being processed.
+        </div>
+        
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Order Failed!</strong><br>
+            <span id="errorText">Please try again later.</span>
+        </div>
+    </div>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeImageModal()">&times;</span>
+            <img id="modalImage" class="modal-image" src="" alt="Enlarged product image">
+        </div>
+    </div>
+
+    <script>
+        let selectedProduct = null;
+        
+        // Load product data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProductDetails();
+        });
+        
+        function loadProductDetails() {
+            // Get product data from sessionStorage
+            const productData = sessionStorage.getItem('selectedProduct');
+            
+            if (!productData) {
+                showError('Product data not found. Please go back and select a product.');
+                return;
+            }
+            
+            try {
+                selectedProduct = JSON.parse(productData);
+                displayProductDetails(selectedProduct);
+            } catch (error) {
+                showError('Error loading product details.');
+                console.error('Error parsing product data:', error);
+            }
+        }
+        
+        function displayProductDetails(product) {
+            const productContent = document.getElementById('productContent');
+            
+            // Create image grid
+            const imagesHtml = createProductImages(product);
+            
+            // Create product info
+            const infoHtml = `
+                <div class="product-info">
+                    <h2 class="product-name">${product.name || 'Unknown Product'}</h2>
+                    <div class="product-price">$${product.price || '0.00'}</div>
+                    <div class="product-category">${product.category || 'Uncategorized'}</div>
+                    <div class="product-stock">
+                        <i class="fas fa-box me-2"></i>
+                        Stock: ${product.stock || 0} units available
+                    </div>
+                    <div class="product-description">
+                        <h4><i class="fas fa-info-circle me-2"></i>About This Product</h4>
+                        <p>This is a high-quality ${product.category || 'product'} that offers excellent value for money. 
+                        Perfect for your everyday needs with premium features and reliable performance.</p>
+                        <p><strong>Product ID:</strong> ${product.id || 'N/A'}</p>
+                        <p><strong>Vendor ID:</strong> ${product.vendorId || 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+            
+            productContent.innerHTML = `
+                <div class="product-content">
+                    <div class="product-images">
+                        ${imagesHtml}
+                    </div>
+                    ${infoHtml}
+                </div>
+            `;
+        }
+        
+        function createProductImages(product) {
+            const images = [];
+            
+            // Collect all available images
+            if (product.image1) images.push(product.image1);
+            if (product.image2) images.push(product.image2);
+            if (product.image3) images.push(product.image3);
+            if (product.image4) images.push(product.image4);
+            
+            let imagesHtml = '';
+            
+            // Create up to 4 image slots
+            for (let i = 0; i < 4; i++) {
+                if (images[i]) {
+                    // If image is a base64 string (starts with data:)
+                    if (images[i].startsWith('data:')) {
+                        imagesHtml += `<div class="product-image" onclick="openImageModal('${images[i]}')"><img src="${images[i]}" alt="Product image ${i + 1}"></div>`;
+                    } else {
+                        // If image is a filename, construct URL
+                        const imageUrl = `http://localhost:8080/uploads/${images[i]}`;
+                        imagesHtml += `<div class="product-image" onclick="openImageModal('${imageUrl}')"><img src="${imageUrl}" alt="Product image ${i + 1}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-image\\'></i>'"></div>`;
+                    }
+                } else {
+                    // Empty slot
+                    imagesHtml += '<div class="product-image"><i class="fas fa-image"></i></div>';
+                }
+            }
+            
+            return imagesHtml;
+        }
+        
+        function placeOrder() {
+            if (!selectedProduct) {
+                showError('No product selected for ordering.');
+                return;
+            }
+            
+            // Check if product is in stock
+            if (selectedProduct.stock <= 0) {
+                showError('This product is currently out of stock.');
+                return;
+            }
+            
+            // Simulate order placement
+            const orderBtn = document.querySelector('.btn-order');
+            orderBtn.disabled = true;
+            orderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+                
+                // Reset button
+                orderBtn.disabled = false;
+                orderBtn.innerHTML = '<i class="fas fa-shopping-bag me-2"></i>Order Now';
+                
+                // Scroll to success message
+                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+                
+                // Optionally, you could update stock count here
+                // selectedProduct.stock -= 1;
+                // displayProductDetails(selectedProduct);
+                
+            }, 2000);
+        }
+        
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        
+        function goBack() {
+            // Clear sessionStorage and go back
+            sessionStorage.removeItem('selectedProduct');
+            window.location.href = 'products.html';
+        }
+        
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+        }
+        
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target == modal) {
+                closeImageModal();
+            }
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
+</body>
+</html>
