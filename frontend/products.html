@@ -128,6 +128,28 @@
             height: 200px;
         }
         
+        .product-image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .product-single-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-single-image:hover {
+            transform: scale(1.05);
+        }
+        
         .product-image {
             width: 100%;
             height: 100%;
@@ -345,30 +367,20 @@
         }
         
         function createImagesGrid(product) {
-            const images = [];
+            // Show only the primary image (image1) for clean listing
+            let imagesHtml = '<div class="product-image-container">';
             
-            // Collect all available images
-            if (product.image1) images.push(product.image1);
-            if (product.image2) images.push(product.image2);
-            if (product.image3) images.push(product.image3);
-            if (product.image4) images.push(product.image4);
-            
-            let imagesHtml = '<div class="product-images">';
-            
-            // Create up to 4 image slots
-            for (let i = 0; i < 4; i++) {
-                if (images[i]) {
-                    // If image is a base64 string (starts with data:)
-                    if (images[i].startsWith('data:')) {
-                        imagesHtml += `<div class="product-image"><img src="${images[i]}" alt="Product image ${i + 1}"></div>`;
-                    } else {
-                        // If image is a filename, construct URL
-                        imagesHtml += `<div class="product-image"><img src="http://localhost:8080/uploads/${images[i]}" alt="Product image ${i + 1}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-image\\'></i>'"></div>`;
-                    }
+            if (product.image1) {
+                // If image is a base64 string (starts with data:)
+                if (product.image1.startsWith('data:')) {
+                    imagesHtml += `<img src="${product.image1}" alt="Product image" class="product-single-image">`;
                 } else {
-                    // Empty slot
-                    imagesHtml += '<div class="product-image"><i class="fas fa-image"></i></div>';
+                    // If image is a filename, construct URL
+                    imagesHtml += `<img src="http://localhost:8080/uploads/${product.image1}" alt="Product image" class="product-single-image" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-image fa-3x\\'></i>'">`;
                 }
+            } else {
+                // No image available
+                imagesHtml += '<i class="fas fa-image fa-3x"></i>';
             }
             
             imagesHtml += '</div>';

@@ -93,6 +93,22 @@ public class ProductController {
     public List<Product> getVendorProducts(@PathVariable Long id) {
         return productService.getVendorProducts(id);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return "Product deleted successfully with id: " + id;
+    }
+
+    @PutMapping("/update/{id}")
+    public Product updateProduct(@PathVariable Long id,
+                                @RequestParam("name") String name,
+                                @RequestParam("price") Double price,
+                                @RequestParam("category") String category,
+                                @RequestParam("stock") Integer stock,
+                                @RequestParam(value = "images", required = false) MultipartFile[] images) {
+        return productService.updateProduct(id, name, price, category, stock, images);
+    }
     
     // Simple image saving method
     private String saveImage(MultipartFile image) throws IOException {

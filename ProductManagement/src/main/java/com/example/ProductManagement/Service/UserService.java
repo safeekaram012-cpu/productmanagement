@@ -46,4 +46,16 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
+
+    public User authenticateUser(String email, String password) {
+        try {
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user != null && user.getPassword().equals(password)) {
+                return user;
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

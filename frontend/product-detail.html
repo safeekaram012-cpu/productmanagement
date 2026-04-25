@@ -420,25 +420,16 @@
             orderBtn.disabled = true;
             orderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
             
-            // Simulate API call delay
-            setTimeout(() => {
-                // Show success message
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('errorMessage').style.display = 'none';
-                
-                // Reset button
-                orderBtn.disabled = false;
-                orderBtn.innerHTML = '<i class="fas fa-shopping-bag me-2"></i>Order Now';
-                
-                // Scroll to success message
-                document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
-                
-                // Optionally, you could update stock count here
-                // selectedProduct.stock -= 1;
-                // displayProductDetails(selectedProduct);
-                
-            }, 2000);
-        }
+            // Store product in sessionStorage and navigate to order page
+            sessionStorage.setItem('selectedProduct', JSON.stringify(selectedProduct));
+            
+            // Navigate to order page
+            window.location.href = 'order.html';
+                                                                
+                                                                
+                                                
+                                                                
+                    }
         
         function showError(message) {
             document.getElementById('errorText').textContent = message;

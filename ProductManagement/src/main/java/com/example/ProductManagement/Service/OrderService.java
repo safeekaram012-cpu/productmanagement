@@ -26,23 +26,33 @@ public class OrderService {
 
     public Orders placeOrder(Long userId, Long productId, Integer qty) {
 
-        User user = userRepository.findById(userId).orElseThrow();
-
-        if (user.getRole() != Role.CUSTOMER) {
-            throw new RuntimeException("Only CUSTOMER can order");
+        // Check if user exists
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new RuntimeException("User not found with ID: " + userId);
         }
 
-        Product product = productRepository.findById(productId).orElseThrow();
+        // Role restriction removed - any user can now place orders
 
+        // Check if product exists
+        Product product = productRepository.findById(productId).orElse(null);
+        if (product == null) {
+            throw new RuntimeException("Product not found with ID: " + productId);
+        }
+
+        // Check if stock is sufficient
         if (product.getStock() < qty) {
-            throw new RuntimeException("Stock not enough");
+            throw new RuntimeException("Stock not enough. Available: " + product.getStock() + ", Requested: " + qty);
         }
 
+        // Calculate total price
         double total = product.getPrice() * qty;
 
+        // Update product stock
         product.setStock(product.getStock() - qty);
         productRepository.save(product);
 
+        // Create and save order
         Orders order = new Orders();
         order.setUserId(userId);
         order.setProductId(productId);

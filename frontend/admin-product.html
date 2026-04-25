@@ -414,8 +414,39 @@
             }
         }
         
+        function checkAdminAccess() {
+            const currentUser = sessionStorage.getItem('currentUser') || localStorage.getItem('currentUser');
+            
+            if (!currentUser) {
+                // User not logged in, redirect to login
+                alert('Please login to access the Admin Panel');
+                window.location.href = 'login.html?dest=admin';
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(currentUser);
+                if (user.role !== 'ADMIN') {
+                    // User is not admin, redirect to login
+                    alert('Access denied. Admin access required.');
+                    window.location.href = 'login.html?dest=admin';
+                    return;
+                }
+                
+                // User is valid admin, show welcome message
+                console.log('Admin access granted for:', user.name);
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+                alert('Invalid session. Please login again.');
+                window.location.href = 'login.html?dest=admin';
+            }
+        }
+        
         // Initialize form submission
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is admin
+            checkAdminAccess();
+            
             document.getElementById('adminProductForm').addEventListener('submit', handleFormSubmit);
         });
     </script>

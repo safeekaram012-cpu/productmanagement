@@ -12,11 +12,21 @@
             min-height: 100vh;
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .main-container {
             max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
         }
         
         .header-section {
@@ -71,10 +81,26 @@
         
         .action-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 25px;
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
+        }
+        
+        @media (max-width: 1200px) {
+            .action-cards {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 900px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .action-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                max-width: 100%;
+            }
         }
         
         .action-card {
@@ -383,6 +409,18 @@
                         <i class="fas fa-plus-circle me-2"></i>Add Product
                     </button>
                 </div>
+                
+                <!-- Product Management Card -->
+                <div class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3 class="action-title">Product Management</h3>
+                    <p class="action-description">Update or delete your products</p>
+                    <button class="action-btn" onclick="goToProductManagement()">
+                        <i class="fas fa-edit me-2"></i>Manage Products
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -452,11 +490,15 @@
         }
         
         function goToAdminPanel() {
-            window.location.href = 'admin-product.html';
+            window.location.href = 'login.html?dest=admin';
         }
         
         function goToVendorPanel() {
-            window.location.href = 'vendor-product.html';
+            window.location.href = 'login.html?dest=vendor';
+        }
+        
+        function goToProductManagement() {
+            window.location.href = 'login.html?dest=product-management';
         }
         
         // AI Assistant functions

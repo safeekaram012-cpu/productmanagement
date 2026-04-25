@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -44,5 +45,18 @@ public class UserController {
     @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return userService.findByEmail(email);
+    }
+
+    @PostMapping("/login")
+    public User login(@RequestBody Map<String, String> credentials) {
+        String email = credentials.get("email");
+        String password = credentials.get("password");
+        
+        User user = userService.authenticateUser(email, password);
+        if (user == null) {
+            throw new RuntimeException("Invalid email or password");
+        }
+        
+        return user;
     }
 }

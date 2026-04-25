@@ -30,24 +30,44 @@
         
         .header-section h1 {
             color: #333;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         
         .header-section p {
             color: #666;
-            margin-bottom: 0;
+            font-size: 1.1rem;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
         }
         
         .form-label {
             font-weight: 600;
-            color: #333;
+            color: #555;
         }
         
         .form-control {
             border: 2px solid #e0e0e0;
             border-radius: 10px;
-            padding: 12px;
+            padding: 12px 15px;
             transition: all 0.3s ease;
         }
         
@@ -56,95 +76,70 @@
             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
         }
         
-        .image-upload-section {
-            border: 2px dashed #667eea;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            background: rgba(102, 126, 234, 0.05);
-            margin-bottom: 20px;
-        }
-        
-        .image-preview-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .image-preview-item {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .image-preview-item img {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-        }
-        
-        .remove-image {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(220, 53, 69, 0.9);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .remove-image:hover {
-            background: rgba(200, 35, 51, 1);
-            transform: scale(1.1);
-        }
-        
         .btn-upload {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #28a745, #20c997);
             border: none;
             color: white;
-            padding: 15px 30px;
+            padding: 15px 40px;
             border-radius: 50px;
             font-weight: 600;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
             width: 100%;
         }
         
         .btn-upload:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
         }
         
-        .btn-upload:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .image-upload-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px dashed #e0e0e0;
         }
         
-        .back-btn {
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .image-preview-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-image {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            background: #667eea;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
             color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .alert-container {
@@ -173,7 +168,7 @@
                 <i class="fas fa-store me-2"></i>Vendor Portal
             </div>
             <h1><i class="fas fa-plus-circle me-3"></i>Add Product</h1>
-            <p class="text-muted">Add your products to the system as a vendor</p>
+            <p class="text-muted">Add your products to system as a vendor</p>
         </div>
         
         <form id="vendorProductForm">
@@ -229,16 +224,94 @@
             </button>
         </form>
         
-        <!-- Alert Container -->
-        <div class="alert-container" id="alertContainer"></div>
+        <div id="alertContainer" class="alert-container"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let selectedImages = [];
         
-        function goBack() {
-            window.location.href = 'index.html';
+        // Initialize form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is vendor
+            checkVendorAccess();
+            
+            document.getElementById('vendorProductForm').addEventListener('submit', handleFormSubmit);
+        });
+        
+        function checkVendorAccess() {
+            const currentUser = sessionStorage.getItem('currentUser') || localStorage.getItem('currentUser');
+            
+            if (!currentUser) {
+                // User not logged in, redirect to login
+                alert('Please login to access Vendor Panel');
+                window.location.href = 'login.html?dest=vendor';
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(currentUser);
+                if (user.role !== 'VENDOR') {
+                    // User is not vendor, redirect to login
+                    alert('Access denied. Vendor access required.');
+                    window.location.href = 'login.html?dest=vendor';
+                    return;
+                }
+                
+                // User is valid vendor, set vendor ID and show welcome message
+                document.getElementById('vendorId').value = user.id;
+                console.log('Vendor access granted for:', user.name);
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+                alert('Invalid session. Please login again.');
+                window.location.href = 'login.html?dest=vendor';
+            }
+        }
+        
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding Product...';
+            
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('category', document.getElementById('category').value);
+            formData.append('stock', document.getElementById('stock').value);
+            formData.append('vendorId', document.getElementById('vendorId').value);
+            
+            // Add images if selected
+            const imageFiles = document.getElementById('productImages').files;
+            for (let i = 0; i < Math.min(imageFiles.length, 4); i++) {
+                formData.append('images', imageFiles[i]);
+            }
+            
+            fetch(`http://localhost:8080/api/products/vendor/add`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(product => {
+                showAlert('Product added successfully!', 'success');
+                document.getElementById('vendorProductForm').reset();
+                document.getElementById('imagePreview').innerHTML = '';
+                selectedImages = [];
+            })
+            .catch(error => {
+                console.error('Error adding product:', error);
+                showAlert('Error adding product: ' + error.message, 'error');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Product as Vendor';
+            });
         }
         
         function previewImages() {
@@ -338,86 +411,16 @@
             
             // Auto-remove after 5 seconds
             setTimeout(() => {
-                if (alert.parentNode) {
+                const alert = alertContainer.querySelector('.alert');
+                if (alert) {
                     alert.remove();
                 }
             }, 5000);
         }
         
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding Product...';
-            
-            try {
-                // Validate form
-                const name = document.getElementById('name').value.trim();
-                const price = document.getElementById('price').value;
-                const category = document.getElementById('category').value.trim();
-                const stock = document.getElementById('stock').value;
-                const vendorId = document.getElementById('vendorId').value;
-                
-                if (!name || !price || !category || !stock || !vendorId) {
-                    showAlert('Please fill in all required fields', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Product as Vendor';
-                    return;
-                }
-                
-                // Create FormData for file upload
-                const formData = new FormData();
-                
-                // Add form fields
-                formData.append('name', name);
-                formData.append('price', price);
-                formData.append('category', category);
-                formData.append('stock', stock);
-                formData.append('vendorId', vendorId);
-                
-                // Add images
-                selectedImages.forEach(file => {
-                    formData.append('images', file);
-                });
-                
-                // Make API call
-                fetch('http://localhost:8080/api/products/vendor/add', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    showAlert('Product added successfully!', 'success');
-                    document.getElementById('vendorProductForm').reset();
-                    document.getElementById('imagePreview').innerHTML = '';
-                    selectedImages = [];
-                })
-                .catch(error => {
-                    console.error('Error adding product:', error);
-                    showAlert('Error adding product: ' + error.message, 'error');
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Product as Vendor';
-                });
-                
-            } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Product as Vendor';
-            }
+        function goBack() {
+            window.location.href = 'index.html';
         }
-        
-        // Initialize form submission
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('vendorProductForm').addEventListener('submit', handleFormSubmit);
-        });
     </script>
 </body>
 </html>
